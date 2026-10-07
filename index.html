@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="th"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff7eb"><link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Bill Split</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;background:#fff8ef;color:#3c251a}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:24px 18px 105px;background:linear-gradient(#fff7eb,#fffaf5)}
+header{display:flex;align-items:center;gap:12px;margin:5px 4px 25px}.logo{width:58px;height:58px;border-radius:18px}
+h1{margin:0;font-size:30px}.sub{color:#9a6c51}.card{background:#fff;border:1px solid #f1dfce;border-radius:24px;padding:18px;box-shadow:0 8px 24px #7b4b2b12}
+h2{font-size:21px;margin:0 0 15px}.row{display:grid;grid-template-columns:1fr 105px 38px;gap:9px;margin:10px 0}
+input{width:100%;border:1px solid #ecdcca;background:#fffdfa;border-radius:16px;padding:14px;font-size:17px;outline:none}
+.del{border:0;background:#fff0eb;color:#e98572;border-radius:14px;font-size:20px}.add{width:100%;padding:14px;border:1.5px dashed #d9bfa7;background:#fffaf3;border-radius:17px;color:#76503a;font-size:17px;margin-top:8px}
+.people{display:flex;align-items:center;justify-content:space-between;margin:22px 0 13px;font-weight:700}.counter{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #eedfce;border-radius:20px;padding:7px}
+.counter button{width:50px;height:45px;border:0;border-radius:15px;background:#fff1df;font-size:27px;color:#74432a}.counter b{font-size:24px}
+.primary{width:100%;border:0;border-radius:20px;padding:17px;background:#8b5838;color:white;font-weight:800;font-size:19px;box-shadow:0 7px 14px #7d482b35}
+.receipt{background:#fffdf8;margin-top:18px;padding:25px 20px 30px;clip-path:polygon(0 2%,3% 0,6% 2%,9% 0,12% 2%,15% 0,18% 2%,21% 0,24% 2%,27% 0,30% 2%,33% 0,36% 2%,39% 0,42% 2%,45% 0,48% 2%,51% 0,54% 2%,57% 0,60% 2%,63% 0,66% 2%,69% 0,72% 2%,75% 0,78% 2%,81% 0,84% 2%,87% 0,90% 2%,93% 0,96% 2%,100% 0,100% 98%,97% 100%,94% 98%,91% 100%,88% 98%,85% 100%,82% 98%,79% 100%,76% 98%,73% 100%,70% 98%,67% 100%,64% 98%,61% 100%,58% 98%,55% 100%,52% 98%,49% 100%,46% 98%,43% 100%,40% 98%,37% 100%,34% 98%,31% 100%,28% 98%,25% 100%,22% 98%,19% 100%,16% 98%,13% 100%,10% 98%,7% 100%,4% 98%,0 100%)}
+.rhead{text-align:center}.rhead h2{font-size:25px;margin:8px}.dash{border-top:1px dashed #bda99c;margin:18px 0}.line{display:flex;justify-content:space-between;margin:11px 0}.total{font-weight:800;font-size:20px}.sharebox{background:#fff0ed;border-radius:17px;padding:16px;margin-top:17px}.sharebox small{font-weight:700}.sharebox strong{display:block;font-size:38px;color:#d83c42;margin-top:2px}
+.actions{display:flex;gap:10px;margin-top:14px}.actions button{flex:1;padding:14px;border-radius:16px;border:1px solid #dfcbb9;background:white;font-weight:700}.actions .green{background:#4e8a62;color:#fff;border:0}
+.hidden{display:none}.hint{text-align:center;color:#a08370;font-size:13px;margin-top:13px}
+</style></head><body><main class="app">
+<header><img src="icon-192.png" class="logo"><div><h1>Bill Split</h1><div class="sub">หารค่าอาหาร ง่ายๆ 🍚</div></div></header>
+<section id="editor" class="card"><h2>เพิ่มรายการ</h2><div id="rows"></div>
+<button class="add" onclick="addRow()">＋ เพิ่มรายการ</button>
+<div class="people"><span>👥 จำนวนคนหาร</span></div>
+<div class="counter"><button onclick="changePeople(-1)">−</button><b id="people">2</b><button onclick="changePeople(1)">＋</button></div>
+<br><button class="primary" onclick="makeReceipt()">▤ ออกใบเสร็จ</button></section>
+<section id="receiptWrap" class="hidden"><div id="receipt" class="receipt">
+<div class="rhead"><img src="icon-192.png" width="55" style="border-radius:16px"><h2>ร้านอาหารตามสั่ง</h2><div>TAX INVOICE / RECEIPT</div><small id="date"></small></div>
+<div class="dash"></div><div class="line"><b>รายการ</b><b>ราคา (บาท)</b></div><div id="receiptItems"></div>
+<div class="dash"></div><div class="line total"><span>รวมเงินทั้งหมด</span><span id="total"></span></div>
+<div class="line"><span>จำนวนคนหาร</span><span id="rpeople"></span></div>
+<div class="sharebox"><small>ยอดหารคนละ</small><strong id="each"></strong></div>
+<div style="text-align:center;margin-top:20px">ขอบคุณที่มาใช้บริการครับ :)</div></div>
+<div class="actions"><button onclick="back()">← แก้ไข</button><button class="green" onclick="shareBill()">↗ แชร์</button></div>
+<p class="hint">กดแชร์แล้วสามารถบันทึก/ส่งใบสรุปได้</p></section>
+</main><script>
+let people=2;
+function addRow(n='',p=''){let d=document.createElement('div');d.className='row';d.innerHTML=`<input class="name" placeholder="รายการ เช่น ข้าวผัด" value="${n}"><input class="price" inputmode="decimal" placeholder="ราคา" value="${p}"><button class="del" onclick="this.parentElement.remove()">×</button>`;rows.appendChild(d)}
+function changePeople(v){people=Math.max(1,people+v);document.getElementById('people').textContent=people}
+function getItems(){return [...document.querySelectorAll('.row')].map(r=>({n:r.querySelector('.name').value.trim(),p:parseFloat(r.querySelector('.price').value)||0})).filter(x=>x.n||x.p)}
+function makeReceipt(){let a=getItems();if(!a.length){alert('ใส่รายการและราคาก่อนครับ');return}let t=a.reduce((s,x)=>s+x.p,0);receiptItems.innerHTML=a.map(x=>`<div class="line"><span>${x.n||'รายการ'}</span><span>${x.p.toFixed(2)}</span></div>`).join('');total.textContent='฿'+t.toFixed(2);rpeople.textContent=people+' คน';each.textContent='฿'+(t/people).toFixed(2);date.textContent=new Date().toLocaleString('th-TH',{dateStyle:'medium',timeStyle:'short'});editor.classList.add('hidden');receiptWrap.classList.remove('hidden');localStorage.setItem('lastBill',JSON.stringify({a,people}))}
+function back(){receiptWrap.classList.add('hidden');editor.classList.remove('hidden')}
+async function shareBill(){let text='Bill Split\\n'+getItems().map(x=>`${x.n} ${x.p.toFixed(2)} บาท`).join('\\n')+`\\nยอดหารคนละ ${each.textContent}`;if(navigator.share)await navigator.share({title:'Bill Split',text});else{await navigator.clipboard.writeText(text);alert('คัดลอกสรุปบิลแล้ว')}}
+addRow('ข้าวเช้า','59');addRow('เกี๊ยว','24');addRow('หมูย่างขนมจีบ','48');
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js');
+</script></body></html>
