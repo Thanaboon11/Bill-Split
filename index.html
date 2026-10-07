@@ -1,0 +1,87 @@
+<!doctype html><html lang="th"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff7eb"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
+<title>Bill Split</title>
+<style>
+:root{--brown:#60351f;--cream:#fff7eb;--paper:#fffdf8;--line:#ead8c6;--muted:#987763;--red:#d93d47;--green:#4d8a60}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;background:#f6eadb;color:#382319}
+.shell{max-width:500px;margin:auto;min-height:100vh;background:linear-gradient(180deg,#fff7eb,#fffaf5);padding:22px 17px 92px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:20px}.logo{width:58px;border-radius:17px}h1{margin:0;font-size:29px;color:var(--brown)}.tag{color:#946b52}
+.card{background:#fff;border:1px solid #efdecd;border-radius:25px;padding:18px;box-shadow:0 10px 30px #74452b12}h2{margin:0 0 14px;font-size:21px}
+.row{display:grid;grid-template-columns:1fr 98px 38px;gap:8px;margin:10px 0}.row input{min-width:0}
+input{border:1px solid #ead9c8;background:#fffdf9;border-radius:16px;padding:14px 12px;font-size:16px;outline:none}.del{border:0;border-radius:14px;background:#fff0ea;color:#e47f6e;font-size:21px}
+.add{width:100%;border:1.5px dashed #d7bca4;background:#fffaf3;border-radius:17px;padding:14px;color:#6e4b36;font-size:16px;margin:5px 0 19px}
+.label{font-weight:750;margin-bottom:9px}.counter{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #ead8c7;border-radius:19px;padding:7px}.counter button{width:49px;height:44px;border:0;border-radius:14px;background:#fff0df;color:#72442c;font-size:26px}.counter b{font-size:24px}
+.primary{width:100%;border:0;border-radius:19px;background:#8a5839;color:#fff;padding:17px;margin-top:18px;font-size:18px;font-weight:800;box-shadow:0 7px 15px #7d4b2d35}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(500px,100%);display:flex;background:#fffdf9;border-top:1px solid #eadfd5;padding:9px 12px max(9px,env(safe-area-inset-bottom));z-index:10}.nav button{flex:1;border:0;background:none;color:#999;font-size:13px;padding:5px}.nav span{display:block;font-size:22px}.nav .active{color:#a45119;font-weight:800}
+.hidden{display:none!important}
+.receiptTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.back,.share{border:0;background:none;font-size:26px;color:var(--brown)}
+.paper{background:var(--paper);padding:28px 20px 32px;filter:drop-shadow(0 8px 15px #79533620);clip-path:polygon(0 1.4%,2.5% 0,5% 1.4%,7.5% 0,10% 1.4%,12.5% 0,15% 1.4%,17.5% 0,20% 1.4%,22.5% 0,25% 1.4%,27.5% 0,30% 1.4%,32.5% 0,35% 1.4%,37.5% 0,40% 1.4%,42.5% 0,45% 1.4%,47.5% 0,50% 1.4%,52.5% 0,55% 1.4%,57.5% 0,60% 1.4%,62.5% 0,65% 1.4%,67.5% 0,70% 1.4%,72.5% 0,75% 1.4%,77.5% 0,80% 1.4%,82.5% 0,85% 1.4%,87.5% 0,90% 1.4%,92.5% 0,95% 1.4%,97.5% 0,100% 1.4%,100% 98.6%,97.5% 100%,95% 98.6%,92.5% 100%,90% 98.6%,87.5% 100%,85% 98.6%,82.5% 100%,80% 98.6%,77.5% 100%,75% 98.6%,72.5% 100%,70% 98.6%,67.5% 100%,65% 98.6%,62.5% 100%,60% 98.6%,57.5% 100%,55% 98.6%,52.5% 100%,50% 98.6%,47.5% 100%,45% 98.6%,42.5% 100%,40% 98.6%,37.5% 100%,35% 98.6%,32.5% 100%,30% 98.6%,27.5% 100%,25% 98.6%,22.5% 100%,20% 98.6%,17.5% 100%,15% 98.6%,12.5% 100%,10% 98.6%,7.5% 100%,5% 98.6%,2.5% 100%,0 98.6%)}
+.rhead{text-align:center}.rhead img{width:55px;border-radius:16px}.rhead h2{font-size:24px;margin:6px 0 1px}.muted{color:#7f6a5c}.dash{border-top:1px dashed #bba89a;margin:17px 0}.line{display:flex;justify-content:space-between;gap:15px;margin:11px 0}.total{font-size:20px;font-weight:850}.each{background:#fff0ed;border-radius:17px;padding:15px;margin-top:17px}.each b{display:block;font-size:39px;color:var(--red)}
+.thanks{text-align:center;margin:22px 0 7px}.actions{display:flex;gap:10px;margin-top:15px}.actions button{flex:1;padding:12px 7px;border-radius:17px;font-weight:800;font-size:15px}.save{background:white;border:1px solid #8a6047}.green{background:var(--green);border:0;color:white}
+.history h2{text-align:center}.hist{background:#fff;border:1px solid #efdfcf;border-radius:20px;padding:14px;margin:11px 0;display:flex;gap:12px;align-items:center}.mini{width:48px;height:60px;background:#fff9ef;border:1px solid #e9c9ab;border-radius:6px;display:grid;place-items:center;font-size:24px}.hbody{flex:1}.hbody b{display:block}.hbody small{color:#8c7566}.hamount{text-align:right;font-weight:850}.empty{text-align:center;color:#9c806f;padding:60px 20px}
+</style></head><body><main class="shell">
+<section id="calc"><header><img src="icon-192.png" class="logo"><div><h1>Bill Split</h1><div class="tag">หารค่าอาหาร ง่ายๆ</div></div></header>
+<div class="card"><h2>เพิ่มรายการ</h2><div id="rows"></div><button class="add" onclick="addRow()">＋ เพิ่มรายการ</button>
+<div class="label">👥 จำนวนคนหาร</div><div class="counter"><button onclick="cp(-1)">−</button><b id="pc">2</b><button onclick="cp(1)">＋</button></div>
+<button class="primary" onclick="createBill()">▤ ออกใบเสร็จ</button></div></section>
+<section id="receiptPage" class="hidden"><div class="receiptTop"><button class="back" onclick="newBillMode()">‹</button><b style="font-size:21px">ใบเสร็จ</b><button class="share" onclick="shareBill()">⌯</button></div>
+<div id="receipt" class="paper"><div class="rhead"><img src="icon-192.png"><h2>ร้านอาหารตามสั่ง</h2><div>TAX INVOICE / RECEIPT</div><div class="muted" id="rdate"></div></div><div class="dash"></div>
+<div class="line"><b>รายการ</b><b>ราคา (บาท)</b></div><div id="ritems"></div><div class="dash"></div>
+<div class="line total"><span>รวมเงินทั้งหมด</span><span id="rtotal"></span></div><div class="line"><span>จำนวนคนหาร</span><span id="rp"></span></div>
+<div class="each"><span>ยอดหารคนละ</span><b id="reach"></b></div><div class="thanks">ขอบคุณ<br><small>ที่มาใช้บริการครับ :)</small></div></div>
+<div class="actions"><button class="save" onclick="editCurrent()">✎ แก้ไข</button><button class="save" onclick="downloadReceipt()">▣ บันทึกเป็นรูป</button><button class="green" onclick="shareBill()">↗ แชร์</button></div></section>
+<section id="history" class="history hidden"><h2>ประวัติ</h2><div id="histList"></div></section>
+</main>
+<nav class="nav"><button id="ncalc" class="active" onclick="newBillMode()"><span>▦</span>คำนวณ</button><button id="nhistory" onclick="show('history');renderHistory()"><span>◷</span>ประวัติ</button></nav>
+<script>
+let people=2,current=null,editingId=null;
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function addRow(n='',p=''){let d=document.createElement('div');d.className='row';d.innerHTML=`<input class="nm" placeholder="รายการ เช่น ข้าวเช้า" value="${esc(n)}"><input class="pr" inputmode="decimal" placeholder="ราคา" value="${esc(p)}"><button class="del" onclick="this.parentElement.remove()">×</button>`;rows.appendChild(d)}
+function cp(v){people=Math.max(1,people+v);pc.textContent=people}
+function items(){return [...document.querySelectorAll('.row')].map(r=>({name:r.querySelector('.nm').value.trim(),price:Number(r.querySelector('.pr').value)||0})).filter(x=>x.name||x.price)}
+function createBill(){
+ let a=items();if(!a.length)return alert('ใส่รายการและราคาก่อนครับ');
+ let total=a.reduce((sum,x)=>sum+x.price,0),now=new Date();
+ let id=editingId||Date.now();
+ current={id,items:a,people,total,each:total/people,date:now.toISOString(),display:now.toLocaleString('th-TH',{dateStyle:'medium',timeStyle:'short'})};
+ let h=JSON.parse(localStorage.getItem('bills')||'[]');
+ if(editingId){
+   let idx=h.findIndex(b=>b.id===editingId);
+   if(idx>=0) h[idx]=current; else h.unshift(current);
+ }else h.unshift(current);
+ localStorage.setItem('bills',JSON.stringify(h.slice(0,50)));
+ editingId=null; draw(current); show('receiptPage')
+}
+function editCurrent(){
+ if(!current)return;
+ editingId=current.id;
+ rows.innerHTML='';
+ current.items.forEach(x=>addRow(x.name,String(x.price)));
+ people=current.people;pc.textContent=people;
+ show('calc');
+ document.querySelector('.primary').textContent='✓ บันทึกการแก้ไข';
+}
+function draw(b){rdate.textContent='วันที่: '+b.display;ritems.innerHTML=b.items.map(x=>`<div class="line"><span>${esc(x.name||'รายการ')}</span><span>${x.price.toFixed(2)}</span></div>`).join('');rtotal.textContent='฿'+b.total.toFixed(2);rp.textContent=b.people+' คน';reach.textContent='฿'+b.each.toFixed(2)}
+function newBillMode(){editingId=null;current=null;rows.innerHTML='';addRow();addRow();people=2;pc.textContent=people;document.querySelector('.primary').textContent='▤ ออกใบเสร็จ';show('calc')}
+function show(id){if(id==='calc'&&!editingId)document.querySelector('.primary').textContent='▤ ออกใบเสร็จ';['calc','receiptPage','history'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));ncalc.classList.toggle('active',id==='calc'||id==='receiptPage');nhistory.classList.toggle('active',id==='history')}
+function renderHistory(){let h=JSON.parse(localStorage.getItem('bills')||'[]');histList.innerHTML=h.length?h.map((b,i)=>`<div class="hist" onclick="openHist(${i})"><div class="mini">🧾</div><div class="hbody"><b>ร้านอาหารตามสั่ง</b><small>${esc(b.display)}<br>${b.people} คน</small></div><div class="hamount">฿${b.each.toFixed(2)}<br><small>/ คน</small></div></div>`).join(''):'<div class="empty">ยังไม่มีประวัติใบเสร็จ</div>'}
+function openHist(i){let h=JSON.parse(localStorage.getItem('bills')||'[]');current=h[i];draw(current);show('receiptPage')}
+function rounded(ctx,x,y,w,h,r,fill){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill()}
+function downloadReceipt(){
+ if(!current)return;
+ const c=document.createElement('canvas'),W=1080,pad=85,lineH=58,header=390,footer=430,H=header+current.items.length*lineH+footer;
+ c.width=W;c.height=H;let x=c.getContext('2d');x.fillStyle='#fffdf8';x.fillRect(0,0,W,H);x.fillStyle='#3a251a';x.textAlign='center';
+ x.font='700 58px sans-serif';x.fillText('ร้านอาหารตามสั่ง',W/2,105);x.font='32px sans-serif';x.fillText('TAX INVOICE / RECEIPT',W/2,160);x.font='28px sans-serif';x.fillStyle='#77665a';x.fillText(current.display,W/2,215);
+ x.strokeStyle='#b9a89b';x.setLineDash([14,12]);x.beginPath();x.moveTo(pad,260);x.lineTo(W-pad,260);x.stroke();x.setLineDash([]);
+ x.textAlign='left';x.fillStyle='#3a251a';x.font='700 31px sans-serif';x.fillText('รายการ',pad,320);x.textAlign='right';x.fillText('ราคา (บาท)',W-pad,320);
+ let y=385;x.font='31px sans-serif';current.items.forEach(it=>{x.textAlign='left';x.fillText(it.name||'รายการ',pad,y);x.textAlign='right';x.fillText(it.price.toFixed(2),W-pad,y);y+=lineH});
+ x.strokeStyle='#b9a89b';x.setLineDash([14,12]);x.beginPath();x.moveTo(pad,y);x.lineTo(W-pad,y);x.stroke();x.setLineDash([]);y+=70;
+ x.font='700 36px sans-serif';x.textAlign='left';x.fillText('รวมเงินทั้งหมด',pad,y);x.textAlign='right';x.fillText('฿'+current.total.toFixed(2),W-pad,y);y+=62;x.font='30px sans-serif';x.textAlign='left';x.fillText('จำนวนคนหาร',pad,y);x.textAlign='right';x.fillText(current.people+' คน',W-pad,y);y+=55;
+ rounded(x,pad,y,W-pad*2,170,28,'#fff0ed');x.fillStyle='#3a251a';x.textAlign='left';x.font='700 29px sans-serif';x.fillText('ยอดหารคนละ',pad+35,y+52);x.fillStyle='#d93d47';x.font='700 66px sans-serif';x.fillText('฿'+current.each.toFixed(2),pad+35,y+130);y+=235;
+ x.fillStyle='#68442e';x.textAlign='center';x.font='34px sans-serif';x.fillText('ขอบคุณที่มาใช้บริการครับ :)',W/2,y);
+ let a=document.createElement('a');a.download='Bill-Split-'+current.id+'.png';a.href=c.toDataURL('image/png');a.click()
+}
+async function shareBill(){if(!current)return;let text='Bill Split\\n'+current.items.map(x=>`${x.name} ${x.price.toFixed(2)} บาท`).join('\\n')+`\\nรวม ${current.total.toFixed(2)} บาท\\n${current.people} คน • คนละ ${current.each.toFixed(2)} บาท`;if(navigator.share)try{await navigator.share({title:'Bill Split',text})}catch(e){}else{await navigator.clipboard.writeText(text);alert('คัดลอกสรุปบิลแล้ว')}}
+addRow();addRow();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js');
+</script></body></html>
