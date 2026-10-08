@@ -83,5 +83,5 @@ function downloadReceipt(){
  let a=document.createElement('a');a.download='Bill-Split-'+current.id+'.png';a.href=c.toDataURL('image/png');a.click()
 }
 async function shareBill(){if(!current)return;let text='Bill Split\\n'+current.items.map(x=>`${x.name} ${x.price.toFixed(2)} บาท`).join('\\n')+`\\nรวม ${current.total.toFixed(2)} บาท\\n${current.people} คน • คนละ ${current.each.toFixed(2)} บาท`;if(navigator.share)try{await navigator.share({title:'Bill Split',text})}catch(e){}else{await navigator.clipboard.writeText(text);alert('คัดลอกสรุปบิลแล้ว')}}
-addRow();addRow();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js');
+addRow();addRow();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js?v=2');
 </script></body></html>
